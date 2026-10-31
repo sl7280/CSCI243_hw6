@@ -17,7 +17,7 @@ typedef struct Node{
 
 typedef struct HashTable{
     //pointer to a list of nodes (buckets) that can use their next_node in case two are mapped to the same index
-    Node *buckets[10];
+    Node *buckets[16];
     size_t size;
 
 }HashTable;
@@ -57,12 +57,13 @@ void ht_destroy(HashTable *self){
             //keep clearing nodes girl
             while(node_siguiente != NULL){
                 free(node_actual);
-                node_actual = node_siguiente;
+                Node *node_actual = node_siguiente;
                 node_siguiente = node_siguiente->next_node;
             }
             free(node_actual);
         }
     }
+    free(self->buckets);//idk man
     free(self);
 }
 
@@ -93,6 +94,7 @@ void ht_put(HashTable *self, int key, int value){
     if(node_at_location == NULL){
         self->buckets[location] = new_bucket;
         self->size += 1;
+        printf("put %d %d", key, value);
         return;
     }
 
@@ -102,6 +104,7 @@ void ht_put(HashTable *self, int key, int value){
         //key already exists; update value
         if(node_at_location->key == key){
             node_at_location->value = value;
+            printf("put %d %d", key, value);
             free(new_bucket);
             return;
         }
@@ -110,6 +113,7 @@ void ht_put(HashTable *self, int key, int value){
         if(node_at_location->next_node == NULL){
             node_at_location->next_node = new_bucket;
             self->size += 1;
+            printf("put %d %d", key, value);
             return;
         }
         node_at_location = node_at_location->next_node;
@@ -143,6 +147,7 @@ int ht_get(const HashTable *self, int key, int *found){
 int ht_contains(const HashTable *self, int key){
 
     if(self == NULL){
+        printf("contains %d -> no", key);
         return(0);
     }
 
@@ -150,11 +155,13 @@ int ht_contains(const HashTable *self, int key){
     Node *node_actual = self->buckets[location];
     while(node_actual != NULL){
         if(node_actual->key == key){
+            printf("contains %d -> yes", key);
             return(1);
         }
         node_actual = node_actual->next_node;
     }
     //you didnt find it
+    printf("contains %d -> no", key);
     return(0);
 }
 
@@ -170,6 +177,7 @@ int ht_remove(HashTable *self, int key){
     
     //if empty
     if(self->buckets[location] == NULL){
+        printf("remove %d -> absent", key);
         return(0);
     }
 
@@ -183,6 +191,7 @@ int ht_remove(HashTable *self, int key){
         }
         free(node_actual);
         self->size -=1;
+        printf("remove %d -> removed", key);
         return(1);
     }
     
@@ -204,17 +213,20 @@ int ht_remove(HashTable *self, int key){
                 //connect the gap that was created by free()
                 cur_node->next_node = node_siguiente;
                 self->size-=1;
+                printf("remove %d -> removed", key);
                 return (1);
             }
 
             //if there is nothing after desired node
             free(node_actual);
             self->size-=1;
+            printf("remove %d -> removed", key);
             return(1);
         }
         node_actual = node_actual->next_node;
     }
     //failed
+    printf("remove %d -> absent", key);
     return(0);
 }
 
@@ -225,5 +237,6 @@ int ht_remove(HashTable *self, int key){
 *@return the number of entries
 */
 size_t ht_size(const HashTable *self){
+    printf("size -> %d", self->size);
     return(self->size);
 }
