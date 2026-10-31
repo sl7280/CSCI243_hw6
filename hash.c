@@ -78,7 +78,7 @@ void ht_put(HashTable *self, int key, int value){
         return;
     }
     unsigned int location = key % NUM_DE_CUBO;
-    printf("dubugging location for negitives: %d", location);
+//    printf("dubugging location for negitives: %d", location);
     Node *node_at_location = self->buckets[location];
     
     //creaete the new node
