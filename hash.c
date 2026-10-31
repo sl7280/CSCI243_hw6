@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 typedef struct Node{
-    Struct Node *next_node;
+    struct Node *next_node;
     int key;
     int value;
 }Node;
@@ -28,7 +28,7 @@ typedef struct HashTable{
 *@return the table, or NULL on allocation failure
 */
 HashTable *ht_create(void){
-    Hashtable *new_hashtable = calloc(1, sizeof(Hashtable));
+    HashTable *new_hashtable = calloc(1, sizeof(Hashtable));
 
     if(new_hashtable == NULL){
         return(NULL);
@@ -81,7 +81,7 @@ void ht_put(HashTable *self, int key, int value){
 */
 int ht_contains(const HashTable *self, int key){
     int location = hash(key);
-    Node *node_actual = buckets[location];
+    Node *node_actual = self->buckets[location];
     while(node_actual != NULL){
         if(node_actual->key == key){
             return(1);
@@ -147,6 +147,8 @@ int ht_remove(HashTable *self, int key){
             return(0);
         }
     }
+    //failed
+    return(1);
 }
 
 
