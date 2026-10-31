@@ -6,6 +6,14 @@
 *
 */
 
+#include <stddef.h>
+#include <stdlib.h>
+
+typedef struct Node{
+    Struct Node *next_node;
+    int key;
+    int value;
+}Node;
 
 typedef struct HashTable{
     //pointer to a list of nodes (buckets) that can use their next_node in case two are mapped to the same index
@@ -14,22 +22,15 @@ typedef struct HashTable{
 
 }HashTable;
 
-typedef struct Node{
-    Struct Node *next_node;
-    int key;
-    int value;
-}Node;
-
 
 /**
 *Create a new, empty hashtable.
 *@return the table, or NULL on allocation failure
 */
 HashTable *ht_create(void){
-    struct Hashtable *new_hashtable = calloc(sizeof(Hashtable));
+    Hashtable *new_hashtable = calloc(1, sizeof(Hashtable));
 
     if(new_hashtable == NULL){
-        printf("failed to allocate memory for hashtable");
         return(NULL);
     }
     return new_hashtable;
@@ -46,8 +47,8 @@ void ht_destroy(HashTable *self){
     for(int i = 0; i<=10; i++){
         
         //free the nodes in the bucket
-        Node node_actual = self->buckets[i];
-        Node node_siguiente = node_actual->next_node;
+        Node *node_actual = self->buckets[i];
+        Node *node_siguiente = node_actual->next_node;
         
         //keep clearing nodes girl
         while(node_siguiente != NULL){
@@ -80,7 +81,7 @@ void ht_put(HashTable *self, int key, int value){
 */
 int ht_contains(const HashTable *self, int key){
     int location = hash(key);
-    Node node_actual = buckets[location];
+    Node *node_actual = buckets[location];
     while(node_actual != NULL){
         if(node_actual->key == key){
             return(1);
