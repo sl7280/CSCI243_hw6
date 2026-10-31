@@ -68,7 +68,44 @@ void ht_destroy(HashTable *self){
 *@param value the value to associate with key
 */
 void ht_put(HashTable *self, int key, int value){
+    int location = hash(key);
+    Node *node_at_loc = self->buckets[location];
 
+    //creaete the new node 
+    Node *new_bucket = malloc(sizeof(Node));
+    new_bucket->key = key;
+    new_bucket->value = value;
+    new_bucket->next_node = NULL;
+    //failsafe
+    if(new_bucket == NULL){
+        return(0);
+    }
+    
+    //if no bucket
+    if(node_at_location == NULL){
+        self->buckets[location] = new_bucket;
+        self->size += 1;
+        return(0);
+    }
+
+    //there is at least one bucket already
+    while(node_at_location != NULL){
+
+        //key already exists; update value
+        if(node_at_location->key == key){
+            node_at_location->value = value;
+            free(new_bucket);
+            return(0);
+        }
+
+        //add new buck to end
+        if(node_at_location->next_node == NULL){
+            node_at_location->next_node = new_bucket;
+            self->size += 1;
+            return(0);
+        }
+    }
+    return(0);
 }
 
 
