@@ -43,7 +43,7 @@ HashTable *ht_create(void){
 */
 void ht_destroy(HashTable *self){
     if(self == NULL){
-        return(0);
+        return;
     }
 
 
@@ -126,9 +126,10 @@ int ht_get(const HashTable *self, int key, int *found){
             return (bucket->value);
         }
         bucket = bucket->next_node;
-    *found = 0
+    *found = 0;
     return(0);
     }
+    return(0);
 }
 
 
