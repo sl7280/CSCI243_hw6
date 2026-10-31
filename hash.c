@@ -9,7 +9,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
-#define NUM_DE_CUBO 40
+#define NUM_DE_CUBO 16
 
 typedef struct Node{
     struct Node *next_node;
