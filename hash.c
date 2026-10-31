@@ -8,6 +8,7 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct Node{
     struct Node *next_node;
@@ -48,7 +49,7 @@ void ht_destroy(HashTable *self){
 
 
     //iterate thru all buckets
-    for(int i = 0; i<=9; i++){
+    for(int i = 0; i<16; i++){
         if(self->buckets[i] != NULL){        
             //free the nodes in the bucket
             Node *node_actual = self->buckets[i];
@@ -57,13 +58,12 @@ void ht_destroy(HashTable *self){
             //keep clearing nodes girl
             while(node_siguiente != NULL){
                 free(node_actual);
-                Node *node_actual = node_siguiente;
+                node_actual = node_siguiente;
                 node_siguiente = node_siguiente->next_node;
             }
             free(node_actual);
         }
     }
-    free(self->buckets);//idk man
     free(self);
 }
 
@@ -122,7 +122,14 @@ void ht_put(HashTable *self, int key, int value){
 }
 
 int ht_get(const HashTable *self, int key, int *found){
+    if(self == NULL){
+        return(0);
+    }
+
     unsigned int location = key % 16;
+
+    *found = 0;
+
     Node *bucket = self->buckets[location];
     while(bucket != NULL){
         if(bucket->key == key){
@@ -130,8 +137,6 @@ int ht_get(const HashTable *self, int key, int *found){
             return (bucket->value);
         }
         bucket = bucket->next_node;
-    *found = 0;
-    return(0);
     }
     return(0);
 }
@@ -181,53 +186,50 @@ int ht_remove(HashTable *self, int key){
         return(0);
     }
 
-    //set current node
+    //set current node and prev node
     Node *node_actual = self->buckets[location];
-    
-    //if first node is key
-    if(node_actual->key == key){
-        if(node_actual->next_node != NULL){
-            self->buckets[location] = node_actual->next_node;
-        }
-        free(node_actual);
-        self->size -=1;
-        printf("remove %d -> removed", key);
-        return(1);
-    }
-    
-    //if node is buried deeper
+    Node *node_anterior = NULL;
+
     while(node_actual != NULL){
+        //if current node is key
         if(node_actual->key == key){
-            
-            //get the next node if exists
+            //if there are nodes after, connect them to the previous one
             if(node_actual->next_node != NULL){
-                Node *node_siguiente = node_actual->next_node;
-                
-                //remove the current node
-                free(node_actual);
-                Node *cur_node = self->buckets[location];
-                while(cur_node->next_node != NULL){
-                    cur_node = cur_node->next_node;
+                //if its the first node with some after
+                if(node_anterior == NULL){
+                    self->buckets[location] = node_actual->next_node;
+                    free(node_actual);
+                    self->size-=1;
+                    return(1);
                 }
-
-                //connect the gap that was created by free()
-                cur_node->next_node = node_siguiente;
-                self->size-=1;
-                printf("remove %d -> removed", key);
-                return (1);
+                //if it's in the middle with some after 
+                else{
+                    node_anterior->next_node = node_actual->next_node;
+                    free(node_actual);
+                    printf("remove %d -> removed", key);
+                    self->size -=1;
+                    return(1);
+                }
             }
-
-            //if there is nothing after desired node
+            //it is the last node
+            if(node_anterior != NULL){
+                node_anterior->next_node = NULL;
+                free(node_actual);
+                printf("remove %d -> removed", key);
+                self->size -=1;
+                return(1);
+            }
+            //it is the only node
             free(node_actual);
-            self->size-=1;
             printf("remove %d -> removed", key);
+            self->size -=1;
             return(1);
+
         }
+        node_anterior = node_actual;
         node_actual = node_actual->next_node;
+            
     }
-    //failed
-    printf("remove %d -> absent", key);
-    return(0);
 }
 
 
@@ -237,6 +239,6 @@ int ht_remove(HashTable *self, int key){
 *@return the number of entries
 */
 size_t ht_size(const HashTable *self){
-    printf("size -> %d", self->size);
+    printf("size -> %zu", self->size);
     return(self->size);
 }
