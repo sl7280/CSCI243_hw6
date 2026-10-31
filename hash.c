@@ -78,6 +78,7 @@ void ht_put(HashTable *self, int key, int value){
         return;
     }
     unsigned int location = key % NUM_DE_CUBO;
+    printf("dubugging location for negitives: %d", location);
     Node *node_at_location = self->buckets[location];
     
     //creaete the new node
@@ -243,6 +244,7 @@ int ht_remove(HashTable *self, int key){
         node_actual = node_actual->next_node;
             
     }
+    return(0);
 }
 
 
@@ -253,7 +255,7 @@ int ht_remove(HashTable *self, int key){
 */
 size_t ht_size(const HashTable *self){
     if(self == NULL){
-        return(NULL);
+        return(0);
     }
     //printf("size -> %zu", self->size);
     return(self->size);
