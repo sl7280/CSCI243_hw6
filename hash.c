@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+#define NUM_DE_CUBO 40
 
 typedef struct Node{
     struct Node *next_node;
@@ -18,7 +19,7 @@ typedef struct Node{
 
 typedef struct HashTable{
     //pointer to a list of nodes (buckets) that can use their next_node in case two are mapped to the same index
-    Node *buckets[16];
+    Node *buckets[NUM_DE_CUBO];
     size_t size;
 
 }HashTable;
@@ -49,20 +50,17 @@ void ht_destroy(HashTable *self){
 
 
     //iterate thru all buckets
-    for(int i = 0; i<16; i++){
-        if(self->buckets[i] != NULL){        
+    for(int i = 0; i<NUM_DE_CUBO; i++){       
             //free the nodes in the bucket
             Node *node_actual = self->buckets[i];
             Node *node_siguiente = node_actual;
         
             //keep clearing nodes girl
             while(node_actual != NULL){
-                node_siguiente = node_actual;
-                node_actual = node_actual->next_node;
-                free(node_siguiente);
+                node_siguiente = node_actual->next_node;
+                free(node_actual);
+                node_actual = node_siguiente;
             }
-            free(node_actual);
-        }
     }
     free(self);
     return;
@@ -79,7 +77,7 @@ void ht_put(HashTable *self, int key, int value){
     if(self == NULL){
         return;
     }
-    unsigned int location = key % 16;
+    unsigned int location = key % NUM_DE_CUBO;
     Node *node_at_location = self->buckets[location];
     
     //creaete the new node
@@ -137,7 +135,7 @@ int ht_get(const HashTable *self, int key, int *found){
         return(0);
     }
 
-    unsigned int location = key % 16;
+    unsigned int location = key % NUM_DE_CUBO;
 
     *found = 0;
 
@@ -167,7 +165,7 @@ int ht_contains(const HashTable *self, int key){
         return(0);
     }
 
-    int location = key % 16;
+    int location = key % NUM_DE_CUBO;
     Node *node_actual = self->buckets[location];
     while(node_actual != NULL){
         if(node_actual->key == key){
@@ -193,7 +191,7 @@ int ht_remove(HashTable *self, int key){
         return(0);
     }
 
-    int location = key % 16;
+    int location = key % NUM_DE_CUBO;
     
     //if empty
     if(self->buckets[location] == NULL){
