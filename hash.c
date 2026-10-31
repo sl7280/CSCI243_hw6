@@ -75,6 +75,9 @@ void ht_destroy(HashTable *self){
 *@param value the value to associate with key
 */
 void ht_put(HashTable *self, int key, int value){
+    if(self == NULL){
+        return;
+    }
     unsigned int location = key % 16;
     Node *node_at_location = self->buckets[location];
     
@@ -94,7 +97,7 @@ void ht_put(HashTable *self, int key, int value){
     if(node_at_location == NULL){
         self->buckets[location] = new_bucket;
         self->size += 1;
-        printf("put %d %d", key, value);
+        //printf("put %d %d", key, value);
         return;
     }
 
@@ -104,7 +107,7 @@ void ht_put(HashTable *self, int key, int value){
         //key already exists; update value
         if(node_at_location->key == key){
             node_at_location->value = value;
-            printf("put %d %d", key, value);
+          //  printf("put %d %d", key, value);
             free(new_bucket);
             return;
         }
@@ -113,7 +116,7 @@ void ht_put(HashTable *self, int key, int value){
         if(node_at_location->next_node == NULL){
             node_at_location->next_node = new_bucket;
             self->size += 1;
-            printf("put %d %d", key, value);
+            //printf("put %d %d", key, value);
             return;
         }
         node_at_location = node_at_location->next_node;
@@ -121,6 +124,13 @@ void ht_put(HashTable *self, int key, int value){
     return;
 }
 
+/**
+*get a constant value 
+*@param self the table
+*@param key the key
+*@param found 1 if found 0 if not
+*@return the value from the key
+*/
 int ht_get(const HashTable *self, int key, int *found){
     if(self == NULL){
         return(0);
