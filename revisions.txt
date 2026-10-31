@@ -1,0 +1,89 @@
+commit 1faf328637817477c6c4d9f1eaf95996923ef1e9
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 16:27:52 2026 -0400
+
+    added numero de cubos
+
+commit 5371635d2a9abdcffa57e6fa6f5d0e24338b4a46
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 15:47:50 2026 -0400
+
+    checking to make sure self is not null
+
+commit 773f4009e792fc7b4a4cad3864ad996e23a463af
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 15:36:52 2026 -0400
+
+    commented out print statements
+
+commit 68decf4fc9957e95ef4ddd594c0a5bce64220302
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 15:21:43 2026 -0400
+
+    debugging remove function
+
+commit d508602c92603cad6f925331872dd43eb0ca167e
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 13:46:11 2026 -0400
+
+    added print statements
+
+commit b4885334e2fa7fec86fc092c839451393fdb0c48
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 12:50:28 2026 -0400
+
+    fixing syntax errors again
+
+commit b8de46cd8929dd1ba882ef1706dfb20c5f58b635
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 12:46:58 2026 -0400
+
+    fixing syntax errors
+
+commit da1577352b793e55c4209ea42f07711accbb62e8
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 11:39:34 2026 -0400
+
+    added put functionality
+
+commit 78db6d32079f6a81449dae26a01294121a3abd04
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 04:38:02 2026 -0400
+
+    fixing compilation errors again
+
+commit e35f7adb1034283ef0f21343097150e7200e0e90
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 04:33:56 2026 -0400
+
+    fixing syntax again
+
+commit 802255afb1bd2765c213e407853e4de52cbf082b
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 04:26:18 2026 -0400
+
+    fixing typos
+
+commit c2ee09b352654d7cce6695a78b220fa8c5348947
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 04:15:42 2026 -0400
+
+    wrote all functions except put
+
+commit b05098605e073c06237412f071d1c98b8cf60ae3
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 04:10:28 2026 -0400
+
+    halfway through implementation
+
+commit 34b2c5066454973298c377f949b1d6e1176eed79
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 02:22:00 2026 -0400
+
+    comented out hash.c
+
+commit d175996231604de093f768e9d2384500396bcb95
+Author: Stephanie Livingston <sl7280@rit.edu>
+Date:   Sat Oct 31 01:47:56 2026 -0400
+
+    baseline: supplied hash.h

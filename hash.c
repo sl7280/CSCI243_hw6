@@ -47,20 +47,20 @@ void ht_destroy(HashTable *self){
     if(self == NULL){
         return;
     }
-
-
-    //iterate thru all buckets
-    for(int i = 0; i<NUM_DE_CUBO; i++){       
-            //free the nodes in the bucket
-            Node *node_actual = self->buckets[i];
-            Node *node_siguiente = node_actual;
+    //iterate through buckets
+    for(int i = 0; i < NUM_DE_CUBO; i++){
+        Node *cur_node = self->buckets[i];
+        Node *to_del = cur_node;
         
-            //keep clearing nodes girl
-            while(node_actual != NULL){
-                node_siguiente = node_actual->next_node;
-                free(node_actual);
-                node_actual = node_siguiente;
+        //iterate through nodes in bucket[i]
+        if(cur_node != NULL){
+            while(cur_node != NULL){
+                to_del = cur_node;
+                cur_node = cur_node->next_node;
+                free(to_del);
             }
+            
+        }
     }
     free(self);
     return;
