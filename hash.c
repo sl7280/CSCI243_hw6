@@ -32,11 +32,9 @@ HashTable *ht_create(void){
         printf("failed to allocate memory for hashtable");
         return(NULL);
     }
-
-    new_hashtable->size = sizeof(Hashtable);
-
     return new_hashtable;
 }
+
 
 /**
 *Destroy a hashtable, freeing every key/value entry it ownes and the table itself safe to call on NULL
@@ -61,6 +59,7 @@ void ht_destroy(HashTable *self){
     free(self);
 }
 
+
 /**
 *Insert key with the given value, or replace the value if the key is already present
 *@param self the table
@@ -70,6 +69,7 @@ void ht_destroy(HashTable *self){
 void ht_put(HashTable *self, int key, int value){
 
 }
+
 
 /**
 *Look up key and return its value
@@ -90,6 +90,7 @@ int ht_contains(const HashTable *self, int key){
     //you didnt find it
     return(0);
 }
+
 
 /**
 *Remove key (and its value) from the table
@@ -114,6 +115,8 @@ int ht_remove(HashTable *self, int key){
             self->buckets[location] = node_actual->next_node;
         }
         free(node_actual);
+        self->size -=1;
+        return(0);
     }
     
     //if node is buried deeper
@@ -133,14 +136,18 @@ int ht_remove(HashTable *self, int key){
 
                 //connect the gap that was created by free()
                 cur_node->next_node = node_siguiente;
+                self->size-=1;
                 return (0);
             }
 
             //if there is nothing after desired node
             free(node_actual);
+            self->size-=1;
+            return(0);
         }
     }
 }
+
 
 /**
 *Report how many key/value pairs the table holds
@@ -148,5 +155,5 @@ int ht_remove(HashTable *self, int key){
 *@return the number of entries
 */
 size_t ht_size(const HashTable *self){
-
+    return(self->size);
 }
