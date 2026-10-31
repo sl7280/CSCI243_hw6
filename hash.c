@@ -28,7 +28,7 @@ typedef struct HashTable{
 *@return the table, or NULL on allocation failure
 */
 HashTable *ht_create(void){
-    HashTable *new_hashtable = calloc(1, sizeof(Hashtable));
+    HashTable *new_hashtable = calloc(1, sizeof(HashTable));
 
     if(new_hashtable == NULL){
         return(NULL);
@@ -54,7 +54,7 @@ void ht_destroy(HashTable *self){
         while(node_siguiente != NULL){
             free(node_actual);
             node_actual = node_siguiente;
-            node siguiente = node_siguiente->next_node;
+            node_siguiente = node_siguiente->next_node;
         }
     }
     free(self);
@@ -131,7 +131,7 @@ int ht_remove(HashTable *self, int key){
                 //remove the current node
                 free(node_actual);
                 Node *cur_node = self->buckets[location];
-                while(cur_node->next_node != Null){
+                while(cur_node->next_node != NULL){
                     cur_node = cur_node->next_node;
                 }
 
