@@ -42,19 +42,25 @@ HashTable *ht_create(void){
 *@param self the table to destroy (may be NULL)
 */
 void ht_destroy(HashTable *self){
-    
+    if(self == NULL){
+        return(0);
+    }
+
+
     //iterate thru all buckets
-    for(int i = 0; i<=10; i++){
+    for(int i = 0; i<=9; i++){
+        if(self->buckets[i] != NULL){        
+            //free the nodes in the bucket
+            Node *node_actual = self->buckets[i];
+            Node *node_siguiente = node_actual->next_node;
         
-        //free the nodes in the bucket
-        Node *node_actual = self->buckets[i];
-        Node *node_siguiente = node_actual->next_node;
-        
-        //keep clearing nodes girl
-        while(node_siguiente != NULL){
+            //keep clearing nodes girl
+            while(node_siguiente != NULL){
+                free(node_actual);
+                node_actual = node_siguiente;
+                node_siguiente = node_siguiente->next_node;
+            }
             free(node_actual);
-            node_actual = node_siguiente;
-            node_siguiente = node_siguiente->next_node;
         }
     }
     free(self);
@@ -68,24 +74,26 @@ void ht_destroy(HashTable *self){
 *@param value the value to associate with key
 */
 void ht_put(HashTable *self, int key, int value){
-    int location = hash(key);
-    Node *node_at_loc = self->buckets[location];
-
-    //creaete the new node 
+    unsigned int location = key % 16;
+    Node *node_at_location = self->buckets[location];
+    
+    //creaete the new node
     Node *new_bucket = malloc(sizeof(Node));
+
+    //failsafe
+    if(new_bucket == NULL){
+        return;
+    }
+
     new_bucket->key = key;
     new_bucket->value = value;
     new_bucket->next_node = NULL;
-    //failsafe
-    if(new_bucket == NULL){
-        return(0);
-    }
     
     //if no bucket
     if(node_at_location == NULL){
         self->buckets[location] = new_bucket;
         self->size += 1;
-        return(0);
+        return;
     }
 
     //there is at least one bucket already
@@ -95,17 +103,32 @@ void ht_put(HashTable *self, int key, int value){
         if(node_at_location->key == key){
             node_at_location->value = value;
             free(new_bucket);
-            return(0);
+            return;
         }
 
         //add new buck to end
         if(node_at_location->next_node == NULL){
             node_at_location->next_node = new_bucket;
             self->size += 1;
-            return(0);
+            return;
         }
+        node_at_location = node_at_location->next_node;
     }
+    return;
+}
+
+int ht_get(const HashTable *self, int key, int *found){
+    unsigned int location = key % 16;
+    Node *bucket = self->buckets[location];
+    while(bucket != NULL){
+        if(bucket->key == key){
+            *found = 1;
+            return (bucket->value);
+        }
+        bucket = bucket->next_node;
+    *found = 0
     return(0);
+    }
 }
 
 
@@ -117,7 +140,12 @@ void ht_put(HashTable *self, int key, int value){
 *@return the value associated with the key, or 0 if the key...
 */
 int ht_contains(const HashTable *self, int key){
-    int location = hash(key);
+
+    if(self == NULL){
+        return(0);
+    }
+
+    int location = key % 16;
     Node *node_actual = self->buckets[location];
     while(node_actual != NULL){
         if(node_actual->key == key){
@@ -134,10 +162,10 @@ int ht_contains(const HashTable *self, int key){
 *Remove key (and its value) from the table
 *@param self the table
 *@param key the key to remove
-@return 1 if the key was present and removed, 0 if it was...
+*@return 1 if the key was present and removed, 0 if it wasnt.
 */
 int ht_remove(HashTable *self, int key){
-    int location = hash(key);
+    int location = key % 16;
     
     //if empty
     if(self->buckets[location] == NULL){
@@ -154,7 +182,7 @@ int ht_remove(HashTable *self, int key){
         }
         free(node_actual);
         self->size -=1;
-        return(0);
+        return(1);
     }
     
     //if node is buried deeper
@@ -175,17 +203,18 @@ int ht_remove(HashTable *self, int key){
                 //connect the gap that was created by free()
                 cur_node->next_node = node_siguiente;
                 self->size-=1;
-                return (0);
+                return (1);
             }
 
             //if there is nothing after desired node
             free(node_actual);
             self->size-=1;
-            return(0);
+            return(1);
         }
+        node_actual = node_actual->next_node;
     }
     //failed
-    return(1);
+    return(0);
 }
 
 
